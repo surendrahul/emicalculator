@@ -1,341 +1,411 @@
-function changecolor(i){
-	console.log(i);
-	var elements = document.getElementsByClassName('loan_type');
-		for(var j=0; j<elements.length; j++) { 
-		  elements[j].style.backgroundColor='#0099C6';
-		}
-	document.getElementById(i).style.backgroundColor='#16D620';
-	changerangeOfSlider(i);
-	/*if(i=="personal_loans"){
-		console.log("true")
-	}*/
+body{
+    margin: 0px;
+    padding:0px;
 }
-function changerangeOfSlider(v){
-	if(v=='home_loan'){
-		document.getElementById('input_range_intrest').max=20;
-		document.getElementById('input_range_amount').max=20000000;
-		document.getElementById('input_range_amount').step=100000;
-		if(document.getElementById("rad1").checked){
-			document.getElementById('input_range_time').max=30;
-			document.getElementById('input_range_time').step=0.5;
-		}
-		else{
-			document.getElementById('input_range_time').max=360;
-			document.getElementById('input_range_time').step=1;
-		}
-		
-	}
-	else if(v=='car_loan'){
-		document.getElementById('input_range_intrest').max=20;
-		document.getElementById('input_range_amount').max=2000000;
-		document.getElementById('input_range_amount').step=10000;
-		if(document.getElementById("rad1").checked){
-			document.getElementById('input_range_time').max=7;
-			document.getElementById('input_range_time').step=0.5;
-		}
-		else{
-			document.getElementById('input_range_time').max=84;
-			document.getElementById('input_range_time').step=1;
-		}
-	}
-	else{
-		document.getElementById('input_range_intrest').max=25;
-		document.getElementById('input_range_amount').max=1500000;
-		document.getElementById('input_range_amount').step=10000;
-		if(document.getElementById("rad1").checked){
-			document.getElementById('input_range_time').max=5;
-			document.getElementById('input_range_time').step=0.5;
-		}
-		else{
-			document.getElementById('input_range_time').max=60;
-			document.getElementById('input_range_time').step=1;
-		}
-	}
+div#nav_bar {
+    width: 100%;
+    background-color: #4285F4;
+    height: 55px;
 }
 
-function calc_a(v) {
-	document.getElementById('input_amount').value=v;
-	document.getElementById('input_range_amount').value=v;
-	calculate_emi();
+div#icon_box {
+    position: relative;
+    //left: 19%;
+    //border: 1px solid;
+    height: 100%;
+    width: 50px;
+    background-color: white;
+    background-image: url("calc.png");
+    background-size: contain;
 }
-
-function calc_i(v) {
-	document.getElementById('input_intrest').value=v;
-	document.getElementById('input_range_intrest').value=v;
-	calculate_emi();
-}
-var m_count=0;
-function loan_tenure_m(){
-	if(y_count==1){
-		y_count=0;
-	}
-	if (m_count==0){
-		document.getElementById('input_range_time').max=60;
-		document.getElementById('input_range_time').step=1;
-		var val = document.getElementById('input_time').value;
-		document.getElementById('input_time').value=val*12;
-		document.getElementById('input_range_time').value=val*12;
-	}
-	m_count=1;
-}
-var y_count=0;
-function loan_tenure_y(){
-
-	if(m_count==1){
-		m_count=0;
-	
-	}
-
-	if (y_count==0) {
-		console.log(y_count);
-		document.getElementById('input_range_time').max=5;
-		document.getElementById('input_range_time').step=0.5;
-		var val = document.getElementById('input_time').value;
-		document.getElementById('input_time').value=Math.ceil(val/12);
-		document.getElementById('input_range_time').value=Math.ceil(val/12);
-	}
-	y_count=1;
-
-}
-
-function calc_t(v){
-	document.getElementById('input_time').value=v;
-	document.getElementById('input_range_time').value=v;
-	calculate_emi();
-}
-
-function dd(){
-	//var p = document.getElementById('input_amount').value;
-	ddd =[[],[],[]];
-	ddd[0][0]="amount split";
-	ddd[0][1]="in rupees";
-	ddd[1][0]="Principal";
-	ddd[1][1]=principal*1;
-	ddd[2][0]="Intrest";
-	ddd[2][1]=intrest;
-	//console.log(ddd);
-}
-
-//function defining to calculate EMI;
-
-function calculate_emi(){
-	
-	p = document.getElementById('input_amount').value;
-	r = (document.getElementById('input_intrest').value)/1200;
-	if(document.getElementById("rad1").checked){
-		var n = document.getElementById('input_time').value*12;
-	}
-	else{
-		var n = document.getElementById('input_time').value;
-	}
-	e = Math.round(p*r*((Math.pow((1+r),n))/((Math.pow((1+r),n))-1)));
-
-	principal=p;
-	intrest=((n*e)-p);
-	totalpay=n*e;
-	document.getElementById("emi").innerHTML="₹ "+e;
-	document.getElementById("total_int").innerHTML="₹ "+intrest;
-	document.getElementById("total_pay").innerHTML="₹ "+totalpay;
-
-
-	// Load google charts
-		google.charts.load('current', {'packages':['corechart']});
-		google.charts.setOnLoadCallback(drawChart);
-
-
-		create_table();
-}
-
-// Draw the chart and set the chart values
-function drawChart() {
-	dd();
-  var data = google.visualization.arrayToDataTable(ddd);
-
-  // Optional; add a title and set the width and height of the chart
-  var options = {'title':'Principal Intrest Slice', 'width':'100%', 'height':'100%', 'backgroundColor':'#EEEEEE'};
-
-  // Display the chart inside the <div> element with id="piechart"
-  var chart = new google.visualization.PieChart(document.getElementById('piechart'));
-  chart.draw(data, options);
-}
-
-function create_table(){
-	document.getElementById('main_table').innerHTML="";
-
-	if(document.getElementById("rad1").checked){
-		var n = document.getElementById('input_time').value*12;
-	}
-	else{
-		var n = document.getElementById('input_time').value;
-	}
-
-	var mon=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec",]
-
-	var dt = new Date();
-	startyear=dt.getFullYear();
-	startmonth=dt.getMonth();
-		var c_year = document.createElement("tr");
-			c_year.setAttribute("id","table_head");
-			var adiv = document.createElement("td");
-			adiv.setAttribute("id","table_head_y");
-			adiv.innerText="Year";
-			var bdiv = document.createElement("td");
-			bdiv.setAttribute("id","table_head_p");
-			bdiv.innerText="Principal";
-			var cdiv = document.createElement("td");
-			cdiv.setAttribute("id","table_head_i");
-			cdiv.innerText="Intrest";
-			var ddiv = document.createElement("td");
-			ddiv.setAttribute("id","table_head_t");
-			ddiv.innerHTML="Total Emi"
-			var ediv = document.createElement("td");
-			ediv.setAttribute("id","table_head_r");
-			ediv.innerText="Remaining";
-			c_year.appendChild(adiv);
-			c_year.appendChild(bdiv);
-			c_year.appendChild(cdiv);
-			c_year.appendChild(ddiv);
-			c_year.appendChild(ediv);
-			document.querySelector('#main_table').appendChild(c_year);
-
-		var c_year = document.createElement("tr");
-			c_year.setAttribute("class","year_head");
-			c_year.setAttribute("onclick","showmonth("+startyear+")");
-			var adiv = document.createElement("td");
-			adiv.innerHTML="<span class='plus'>  +  </span>"+startyear;
-			var bdiv = document.createElement("td");
-			bdiv.setAttribute("id","principal"+startyear);
-			var cdiv = document.createElement("td");
-			cdiv.setAttribute("id","intrest"+startyear);
-			var ddiv = document.createElement("td");
-			ddiv.setAttribute("id","totalemi"+startyear);
-			var ediv = document.createElement("td");
-			ediv.setAttribute("id","remaining"+startyear);
-			c_year.appendChild(adiv);
-			c_year.appendChild(bdiv);
-			c_year.appendChild(cdiv);
-			c_year.appendChild(ddiv);
-			c_year.appendChild(ediv);
-			document.querySelector('#main_table').appendChild(c_year);
-		Remaining_p=p;
-		var startingyear=startyear
-		var year_wise_principal=0;
-		var year_wise_intrest=0;
-		var year_wise_emi=0;
-	while (n>0){
-
-		mon_pri=Math.ceil(e-(Remaining_p*r));
-		var mdiv = document.createElement("tr");
-			mdiv.setAttribute("class","tohide "+startingyear);
-			var adiv = document.createElement("td");
-			adiv.innerText=mon[startmonth];
-			var bdiv = document.createElement("td");
-			bdiv.innerText=mon_pri;
-			var cdiv = document.createElement("td");
-			cdiv.innerText=Math.ceil(Remaining_p*r);
-			var ddiv = document.createElement("td");
-			ddiv.innerText=e;
-			var ediv = document.createElement("td");
-			ediv.innerText=Remaining_p-mon_pri;
-
-			mdiv.appendChild(adiv);
-			mdiv.appendChild(bdiv);
-			mdiv.appendChild(cdiv);
-			mdiv.appendChild(ddiv);
-			mdiv.appendChild(ediv);
-			document.querySelector('#main_table').appendChild(mdiv);
-			year_wise_principal+=mon_pri;
-			year_wise_intrest+=Math.ceil(Remaining_p*r);
-			year_wise_emi+=e;
-
-			document.getElementById("principal"+startingyear).innerText=year_wise_principal;
-			document.getElementById("intrest"+startingyear).innerText=year_wise_intrest;
-			document.getElementById("totalemi"+startingyear).innerText=year_wise_emi;
-			document.getElementById("remaining"+startingyear).innerText=Remaining_p-mon_pri;
-
-
-			if(startmonth==11 && n!=1){
-				var start=(startyear++)+1;
-				var c_year = document.createElement("tr");
-				c_year.setAttribute("class","year_head");
-				c_year.setAttribute("onclick","showmonth("+start+")");
-				var adiv = document.createElement("td");
-				adiv.innerHTML="<span class='plus'>  +  </span>"+start;
-				var bdiv = document.createElement("td");
-				bdiv.setAttribute("id","principal"+start);
-				var cdiv = document.createElement("td");
-				cdiv.setAttribute("id","intrest"+start);
-				var ddiv = document.createElement("td");
-				ddiv.setAttribute("id","totalemi"+start);
-				var ediv = document.createElement("td");
-				ediv.setAttribute("id","remaining"+start);
-				c_year.appendChild(adiv);
-				c_year.appendChild(bdiv);
-				c_year.appendChild(cdiv);
-				c_year.appendChild(ddiv);
-				c_year.appendChild(ediv);
-				document.querySelector('#main_table').appendChild(c_year);
-				
-				year_wise_principal=0;
-				year_wise_intrest=0;
-				year_wise_emi=0;
-				startmonth=0;
-				startingyear++;
-			}else{
-				startmonth++;
-			}
-			
-			Remaining_p=Remaining_p-mon_pri;
-
-		n--;
-	}
-	drawstakedchart();
-}
-function showmonth(v){
-	var show = document.getElementsByClassName(v);
-	var item = show[0];
-	if(item.style.display =='' || item.style.display=='none'){
-		for (var i = 0; i < show.length; ++i) {
-		    var item = show[i];  
-		    item.style.display = 'table-row';
-		}
-	}
-	else{
-		for (var i = 0; i < show.length; ++i) {
-		    var item = show[i];  
-		    item.style.display = 'none';
-		}
-	}
-
-}
-
-function drawstakedchart(){
-	var dat= new Date();
-	var thisyear=dat.getFullYear();
-	var dataforstack=[['Genre', 'Remaining Loan Amount','Intrest Paid']];
-	for (var i = thisyear; i <= startyear; i++) {
-		dataforstack.push([i.toString(),(document.getElementById('remaining'+i).innerText)*1,(document.getElementById('intrest'+i).innerText)*1]);
-		//data.push(['k','i','j'])
-	}
-	//console.log(dataforstack);
-	google.charts.load('current', {packages: ['corechart', 'bar']});
-google.charts.setOnLoadCallback(drawStacked);
-
-function drawStacked() {
-      
-      var data = google.visualization.arrayToDataTable(dataforstack);
-
-      var options = {
-        //width: 600,
-        height: 400,
-        legend: { position: 'top', maxLines: 3 },
-        bar: { groupWidth: '75%' },
-        isStacked: true,
-      };
-
-      
-
-      var chart = new google.visualization.ColumnChart(document.getElementById('chart_div'));
-      chart.draw(data, options);
+@media screen and (max-width: 733px) {
+    #icon_box{
+        left: 1%;
     }
+}
+@media screen and (min-width: 733px) {
+    #icon_box{
+        left: 19%;
+    }
+}
+div#h_name_box {
+    position: relative;
+    //left: 25%;
+    top: -100%;
+    width: 300px;
+    background-color: white;
+    color: #00AEFF;
+    text-align: center;
+    font-size: 30px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    border-bottom: 1px dashed;
+    font-family: 'Kaushan Script', cursive;
+}
+@media screen and (max-width: 733px) {
+    #h_name_box{
+        left: 15%;
+    }
+}
+@media screen and (min-width: 733px) {
+    #h_name_box{
+        left:25%;
+    }
+}
+
+@media screen and (min-width: 733px) {
+#main_body {
+        position: relative;
+        width: 62%;
+        margin: auto;
+        margin-top: 50px;
+        background-color: #EEEEEE;
+        border-radius: 10px;
+        padding-top: 15px;
+        margin-top: 20px;
+    }
+}
+@media screen and (max-width: 733px) {
+    #main_body {
+        width: 100%;
+        margin-top: 20px;
+    }
+}
+div#main_body_inner {
+    position: relative;
+    width: 96%;
+    margin: auto;
+    //border: 2px dashed #7f7f66;
+    padding: 10px;
+   
+}
+@media screen and (max-width: 733px) {
+    #icon_box{
+        left: 1%;
+    }
+}
+@media screen and (min-width: 733px) {
+    #main_body_inner{
+        border: 2px dashed #7f7f66;
+    }
+}
+.loan_type{
+    position: relative;
+    padding: 10px;
+    display: inline-block;
+    background-color: #0099C6;
+    margin: -2px;
+    border-right: 2px solid #4285F4;
+    font-size: 20px;
+    font-family: 'Slabo 27px', serif;
+    color: white;
+}
+@media screen and (max-width: 400px) {
+    .loan_type{
+        display: list-item;
+    }
+}
+#personal_loan{background-color: #16D620}
+
+div.input_name {
+    position: relative;
+    left: 20%;
+    font-size: 20px;
+}
+@media screen and (max-width: 733px) {
+    .input_name{
+        top: 17px;
+        width: 57%;
+    }
+}
+@media screen and (min-width: 733px) {
+    .input_name{
+        top: 30px;
+        width: 20%;
+    }
+}
+input.number_field {
+    position: relative;
+    //left: 40%;
+    font-size: 20px;
+    padding: 5px;
+    width: 30%;
+    outline: none;
+    border:2px solid;
+    border-bottom-left-radius: 14px;
+    border-top-left-radius: 14px;
+    padding-left: 20px;
+}
+@media screen and (max-width: 733px) {
+    input.number_field{
+       left: 20%;
+       top: 18px;
+    }
+}
+@media screen and (min-width: 733px) {
+    input.number_field{
+        left: 40%;
+    }
+}
+
+div.r_sings {
+    position: relative;
+    border: 2px solid black;
+    border-left: 0;
+    padding: 4.5px;
+    padding-left: 18px;
+    font-size: 20px;
+    width: 2%;
+    border-bottom-right-radius: 14px;
+    border-top-right-radius: 14px;
+}
+@media screen and (max-width: 733px) {
+    .r_sings{
+       top: -19px;
+       left: 56%;
+    }
+}
+@media screen and (min-width: 733px) {
+    .r_sings{
+        top: -37px;
+        left: 72%;
+    }
+}
+input[type=range] {
+    -webkit-appearance: none;
+    width: 94%;
+    margin-left: 3%; 
+}
+input[type=range]::-webkit-slider-runnable-track {
+    width: 300px;
+    height: 8px;
+    background: #0099C6;
+    border-radius: 3px;
+}
+input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    border: none;
+    height: 16px;
+    width: 16px;
+    border-radius: 50%;
+    background: #16D620;
+    margin-top: -4px;
+}
+input[type=range]:focus {
+    outline: none;
+}
+.input_name_t {
+    position: relative;
+    font-size: 20px;
+    margin-left: 10%;
+    margin-top: 40px;
+    
+}
+@media screen and (max-width: 733px) {
+    .input_name_t{
+       width: 30%;
+       top: -24px;
+        left: 10%;
+        margin-bottom: 5px;
+    }
+}
+@media screen and (min-width: 733px) {
+    .input_name_t{
+
+        width: 10%;
+    }
+}
+input#input_time {
+    position: relative;
+    top: -29px;
+    left: 20%;
+    font-size: 20px;
+    width: 35px;
+    padding: 5px;
+    padding-left: 10px;
+    border:2px solid;
+    outline: 0;
+    border-radius: 14px;
+}
+input[type=radio] {
+    position: relative;
+    top: -30px;
+    left: 21%;
+    margin: -1px;
+}
+input[type=radio].radio1:after {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: 2px solid black;
+  content: "Yr";
+  //background-color:#CCCCCC;
+  padding-top: 9px;
+  border-top-left-radius: 14px;
+  border-bottom-left-radius: 14px;
+}
+input[type=radio].radio2:after {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: 2px solid black;
+  content: "Mo";
+  //background-color:#CCCCCC;
+  padding-top: 9px;
+  border-top-right-radius: 14px;
+  border-bottom-right-radius: 14px;
+}
+input[type=radio].radio1{
+    width:50px;
+    height:27px;
+    display: inline-block;
+    text-align: center;
+    font-size: 18px;
+    
+}
+input[type=radio].radio2{
+    width:50px;
+    height:27px;
+    display: inline-block;
+    text-align: center;
+    font-size: 18px;
+
+}
+input:checked + label {
+        background-color: green;
+        color: #FFF;
+        box-shadow: green;
+        border-color: green;
+        z-index: 1;
+
+}
+hr{
+    margin-top: 40px;
+}
+@media screen and (min-width: 733px) {
+    div#second_box {
+        position: relative;
+        border: 1px solid;
+        width: 100%;
+        height: 400px;
+        margin-top: 10px;
+    }
+}
+@media screen and (min-width: 733px) {
+    div#piechart {
+    position: relative;
+    display: inline-block;
+    width: 48%;
+    height: 99%;
+    }
+}
+@media screen and (max-width: 733px) {
+    div#piechart {
+        width: 100%;
+        height: 340px;
+    }
+}
+@media screen and (min-width: 733px) {
+    div#emi_text {
+        position: relative;
+        display: inline-block;
+        width: 50%;
+        height: 100%;
+        border-right: 0.5px solid black;
+    }
+}
+@media screen and (max-width: 733px) {
+    div#emi_text {
+        width: 100%;
+        height: 340px;
+    }
+}
+
+.li {
+    position: relative;
+    display: table;
+    width: 100%;
+    height: 33%;
+}
+div#li2 {
+    border-top: 1px dashed;
+    border-bottom: 1px dashed;
+}
+.li_text {
+    position: relative;
+    width: 50%;
+    height: 20%;
+   // border: 1px solid;
+    margin: auto;
+    text-align: center;
+    font-size: 17px;
+    margin-top: 5%;
+}
+
+.value_box {
+    position: relative;
+    top: 0px;
+    width: 40%;
+    height: 35%;
+    margin: auto;
+    margin-top: 1%;
+    border-radius: 10px;
+    color: white;
+    font-size: 28px;
+    background-color: #3366CC;
+    text-align: center;
+    padding-top: 1%;
+    box-shadow: 0px 10px 30px black;
+}
+div#table_div {
+    border: 0.5px solid black;
+    width: 100%;
+    /* height: 300px; */
+    margin-top: 5px;
+}
+table {
+    width: 100%;
+    text-align: center;
+    border-collapse: collapse;
+}
+tr{
+    background-color: wheat;
+}
+td{
+    border: 0.2px solid;
+}
+#table_head {
+    height: 60px;
+}
+#table_head_y{
+    background-color: #7AB3D0;
+}
+#table_head_p{
+    background-color: #0072AA;
+}
+#table_head_i{
+    background-color: #ED8C2B;
+}
+#table_head_t{
+    background-color: #B8204C;
+}
+#table_head_r{
+    background-color: #20BB5E;
+}
+
+.plus {
+    color: red;
+    font-size: 20px
+
+}
+.year_head{
+    background-color: #EEEEEE;
+}
+
+.tohide{
+    display: none;
+}
+
+#chart_div{
+    width: 100%;
 }
