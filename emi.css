@@ -114,7 +114,7 @@ div.input_name {
 @media screen and (max-width: 733px) {
     .input_name{
         top: 17px;
-        width: 57%;
+        width: 65%;
         font-size: 15px;
     }
 }
