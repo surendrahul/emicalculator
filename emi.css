@@ -4,7 +4,7 @@ body{
 }
 div#nav_bar {
     width: 100%;
-    background-color: #4285F4;
+    background-color: red;
     height: 55px;
 }
 
