@@ -110,18 +110,19 @@ div#main_body_inner {
 div.input_name {
     position: relative;
     left: 20%;
-    font-size: 20px;
 }
 @media screen and (max-width: 733px) {
     .input_name{
         top: 17px;
         width: 57%;
+        font-size: 15px;
     }
 }
 @media screen and (min-width: 733px) {
     .input_name{
         top: 30px;
         width: 20%;
+        font-size: 20px;
     }
 }
 input.number_field {
@@ -196,7 +197,6 @@ input[type=range]:focus {
 }
 .input_name_t {
     position: relative;
-    font-size: 20px;
     margin-left: 10%;
     margin-top: 40px;
     
@@ -206,12 +206,13 @@ input[type=range]:focus {
        width: 30%;
        top: -24px;
         left: 10%;
+        font-size: 15px;
         margin-bottom: 5px;
     }
 }
 @media screen and (min-width: 733px) {
     .input_name_t{
-
+        font-size: 20px;
         width: 10%;
     }
 }
