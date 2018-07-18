@@ -317,7 +317,7 @@ function drawstakedchart(){
 		dataforstack.push([i.toString(),(document.getElementById('remaining'+i).innerText)*1,(document.getElementById('intrest'+i).innerText)*1]);
 		//data.push(['k','i','j'])
 	}
-	console.log(dataforstack);
+	//console.log(dataforstack);
 	google.charts.load('current', {packages: ['corechart', 'bar']});
 google.charts.setOnLoadCallback(drawStacked);
 
